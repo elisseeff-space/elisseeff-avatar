@@ -5,20 +5,25 @@ __pycache__/
 
 # C extensions
 *.so
+*.db
 
 # Distribution / packaging
 .Python
 build/
+db/
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
 lib/
+log/
 lib64/
 parts/
 sdist/
 var/
+voice/
+voices/
 wheels/
 pip-wheel-metadata/
 share/python-wheels/
