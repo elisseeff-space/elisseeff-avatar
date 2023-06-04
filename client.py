@@ -1,16 +1,15 @@
-from sqlite_db import use_log_add_command
+#from sqlite_db import use_log_add_command
 import logging
 from pathlib import Path
 from aiogram import Dispatcher, types
 from aiogram.types import ContentType, File, Message, ReplyKeyboardRemove
 from create_bot import bot, my_status
 from client_kb import kb_client
-from recognize_yandex_stt import transcribe_file
+#from recognize_yandex_stt import transcribe_file
 from datetime import datetime
-from openai_req import send, update, call_openai
-from sqlite_db import elis_openai_log_insert, get_help_text
+from openai_req import send, update#, call_openai
+from sqlite_db import get_help_text #elis_openai_log_insert
 
-#@dp.message_handler(commands=['start', 'help'])
 async def command_start(message : types.Message):
 
     text_for_out = get_help_text()
@@ -91,11 +90,11 @@ async def correction_command(message : types.Message):
 def register_handlers_client(dp : Dispatcher):
 
     # Voice recognition handlers
-    dp.register_message_handler(voice_message_handler, content_types=[
-    types.ContentType.VOICE,
-    types.ContentType.AUDIO,
-    types.ContentType.DOCUMENT
-    ])
+    #dp.register_message_handler(voice_message_handler, content_types=[
+    #types.ContentType.VOICE,
+    #types.ContentType.AUDIO,
+    #types.ContentType.DOCUMENT
+    #])
     dp.register_message_handler(command_start, commands=['start', 'help'])
     dp.register_message_handler(correction_command, commands=['corr', 'correction'])
     #dp.register_message_handler(affect_command, commands=['aff', 'affect'])

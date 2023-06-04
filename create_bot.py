@@ -11,6 +11,7 @@ config = json.load(file)
 
 class BotStatus:
     dbase: sq.Connection
+    project_id: str
     # Initialize a dictionary to store messages for each group
     # Здесь храним отдельные очереди сообщений для каждого группового чата,
     # из которого приходят сообщения
@@ -34,6 +35,7 @@ class BotStatus:
     
     
 my_status = BotStatus()
+my_status.project_id = config['avatar_project_id']
 
 #bot = Bot(token = config['Elis_OpenAI_bot'])
 bot = Bot(token = config['VoskModelSTT_bot'])

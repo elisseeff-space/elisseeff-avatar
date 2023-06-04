@@ -3,8 +3,9 @@ from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 import json, string
-from sqlite_db import elis_openai_log_insert, sql_start
+from sqlite_db import elisseeff_avatar_log_insert, sql_start
 from create_bot import bot, my_status
+from detect_intent_texts import detect_intent_texts
 
 file = open('/home/pavel/cfg/config.json', 'r')
 config = json.load(file)
@@ -66,14 +67,16 @@ async def send(message : types.Message):
 #        if f'@{bot_info.username}' in message.text:
         #await bot.send_chat_action(message.chat.id, 'typing')
         update(chat_id, my_status.group_messages, "user", message.text, my_status.count_messages)
-        avatar_log_insert(message.date, str(message.from_user.id), 
-                    str(message.from_user.username), chat_id, 'user', str(message.text), 0, 0, 0)
-        #chat_response = call_openai(chat_id)
-        update(chat_id, my_status.group_messages, "assistant", chat_response['choices'][0]['message']['content'], my_status.count_messages)
-        elis_openai_log_insert(message.date, str(message.from_user.id), 
-                    str(message.from_user.username), chat_id, 'assistant', chat_response['choices'][0]['message']['content'], 
-                    int(chat_response['usage']['prompt_tokens']), int(chat_response['usage']['completion_tokens']), int(chat_response['usage']['total_tokens']))
-        await message.answer(chat_response['choices'][0]['message']['content'])
+        elisseeff_avatar_log_insert(message.date, str(message.from_user.id), 
+                    str(message.from_user.username), chat_id, 'user', str(message.text), 'query', 0, 0, 0)
+        
+        response = detect_intent_texts(my_status.project_id, message.text, 'en-US')
+        res_txt = response.query_result.fulfillment_text
+        update(chat_id, my_status.group_messages, "assistant", response.query_result.fulfillment_text, my_status.count_messages)
+        elisseeff_avatar_log_insert(message.date, str(message.from_user.id), 
+                    str(message.from_user.username), chat_id, 'assistant', res_txt, 
+                    response.query_result.intent.display_name, response.query_result.intent_detection_confidence, 0, 0)
+        await message.answer(res_txt)
 
 if __name__ == '__main__':
     print('Hello!')

@@ -1,6 +1,8 @@
 import logging
 from aiogram.utils import executor
 from client import register_handlers_client
+from sqlite_db import sql_start, get_elis_chats_for_initialisation, get_chat_messages
+from openai_req import update
 
 from create_bot import dp, my_status
 

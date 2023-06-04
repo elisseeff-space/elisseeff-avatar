@@ -14,7 +14,7 @@ def sql_start() -> sq.Connection:
     # log of voice recognition hystory
     #dbase.execute('create table if not exists elisseeff-avatar_use_log(use_date TEXT, user_name TEXT, user_id TEXT, action TEXT, words INT, language_code TEXT, confidence REAL)')
     # log of OpenAI chat hystory
-    dbase.execute('create table if not exists elisseeff_avatar_log(message_date TEXT, user_id TEXT, user_name TEXT, chat_id TEXT, role TEXT, content TEXT, prompt_tokens INTEGER, completion_tokens INTEGER, total_tokens INTEGER)')
+    dbase.execute('create table if not exists elisseeff_avatar_log(message_date TEXT, user_id TEXT, user_name TEXT, chat_id TEXT, role TEXT, content TEXT, intent TEXT, prompt_tokens INTEGER, completion_tokens INTEGER, total_tokens INTEGER)')
     dbase.execute('CREATE TABLE if not exists "config_param" ("param"  TEXT NOT NULL UNIQUE, "value"  TEXT, PRIMARY KEY("param"))')
     
     select_query = "SELECT value from config_param where param = 'help'"
@@ -76,11 +76,11 @@ def get_elis_stat():
         my_status.logger.error("get_elis_stat ERROR: SELECT user_name, role, count(*), sum(total_tokens) from elisseeff_avatar_log group by user_name, role !")
 
 def elisseeff_avatar_log_insert(message_date, user_id: str, user_name: str, chat_id: str, role: str,
-                content: str, prompt_tokens: int, completion_tokens: int, total_tokens: int) -> bool :
+                content: str, intent: str, prompt_tokens: int, completion_tokens: int, total_tokens: int) -> bool :
     #global my_status
     #use_date = datetime.now()
-    params = (message_date, user_id, user_name, chat_id, role, content, prompt_tokens, completion_tokens, total_tokens)
-    my_status.dbase.execute('insert into elisseeff_avatar_log values (?,?,?,?,?,?,?,?,?)', params)
+    params = (message_date, user_id, user_name, chat_id, role, content, intent, prompt_tokens, completion_tokens, total_tokens)
+    my_status.dbase.execute('insert into elisseeff_avatar_log values (?,?,?,?,?,?,?,?,?,?)', params)
     my_status.dbase.commit()
     return True
 
